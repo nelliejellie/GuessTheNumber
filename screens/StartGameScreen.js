@@ -5,10 +5,24 @@ import Card from '../components/Card.js';
 
 const StartGameScreen = props =>{
     const [enteredValue, setEnteredValue] = useState('')
+    const [confirmed, setConfirmed] = useState(false)
+    const [selectedNumber, setCollectedNumber] = useState('')
 
-    const resetInputHndler = () =>{
+    const resetInputHandler = () =>{
         setEnteredValue('')
     }
+    const confirmInputHandler = () =>{
+        let confirmedValue = parseInt(enteredValue)
+        setConfirmed(true)
+        setCollectedNumber(confirmedValue)
+        setEnteredValue('')
+        
+    }
+    let confirmedText;
+    if (confirmed){
+        confirmedText = <Text>value: {selectedNumber}</Text>
+    }
+    
     return(
         <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
             <View style={styles.screen}>
@@ -24,11 +38,12 @@ const StartGameScreen = props =>{
                      onChangeText={text => setEnteredValue(text)}
                      />
                     <View style={styles.buttonView}>
-                        <Button title='reset' onPress={resetInputHndler}/>
-                        <Button title='play'/>
+                        <Button title='reset' onPress={resetInputHandler}/>
+                        <Button title='play' onPress={confirmInputHandler}/>
                     </View>
                 </View>
                 </Card>
+                {confirmedText}
             </View>
         </TouchableWithoutFeedback>
     );
