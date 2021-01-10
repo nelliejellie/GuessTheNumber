@@ -8,19 +8,35 @@ const StartGameScreen = props =>{
     const [confirmed, setConfirmed] = useState(false)
     const [selectedNumber, setCollectedNumber] = useState('')
 
+    let confirmedText;
     const resetInputHandler = () =>{
-        setEnteredValue('')
-    }
-    const confirmInputHandler = () =>{
-        let confirmedValue = parseInt(enteredValue)
-        setConfirmed(true)
-        setCollectedNumber(confirmedValue)
         setEnteredValue('')
         
     }
-    let confirmedText;
+    const confirmInputHandler = () =>{
+        let confirmedValue = parseInt(enteredValue)
+        if (confirmedValue > 100 || confirmedValue <= 0 || isNaN(confirmedValue)){
+            setEnteredValue('')
+            setConfirmed(false)
+            Keyboard.dismiss()
+        }else{
+        setConfirmed(true)
+        setCollectedNumber(confirmedValue)
+        setEnteredValue('')
+        Keyboard.dismiss()
+        }
+        
+    }
+    
     if (confirmed){
-        confirmedText = <Text>value: {selectedNumber}</Text>
+        confirmedText = <Card>
+                            <View >
+                                <Text style={styles.selectedText}>value: {selectedNumber}</Text>
+                                <Button title='Start Game' color='green'/>
+                            </View>
+                        </Card>
+    }else{
+        confirmedText = <Text>the value entered is not within range...it must be between 1 and 100</Text>
     }
     
     return(
@@ -74,7 +90,11 @@ const styles = StyleSheet.create({
         borderBottomWidth:2,
         textAlign:'center',
         width:40,
-    }
+    },
+    selectedText:{
+        textAlign:'center',
+    },
+    
 });
 
 export default StartGameScreen;
